@@ -1,8 +1,8 @@
 /*
     A script for testing Tiny Language syntax.
 */
-
 // boolean expressions
+
 assert(true || false);
 assert(!false);
 assert(true && true);
@@ -93,6 +93,20 @@ def list()
   return [7,8,9];
 end
 
+def nestfun1()
+  def nestfun2()
+    def nestfun3()
+      return 111;
+    end
+    assert(nestfun3() == 111);
+    return 1;
+  end
+  assert(nestfun2() == 1);
+  return 0;
+end
+nestfun1();
+
+
 assert(squared(666) == 666^2);
 assert(twice(squared(5)) == 50);
 assert(squaredAndTwice(10) == 200);
@@ -139,6 +153,8 @@ assert(sequence == [0,1,1,2,3,5,8,13,21,34,55]);
 // lists and lookups, `in` operator
 n = [[1,0,0],[0,1,0],[0,0,1]];
 p = [-1, 'abc', true];
+
+
 
 assert('abc' in p);
 assert([0,1,0] in n);

@@ -17,17 +17,16 @@ public class Scope {
         parent = p;
         variables = new HashMap<String, TLValue>();
     }
-    
+
     public void assignParam(String var, TLValue value) {
-    	variables.put(var, value);
+        variables.put(var, value);
     }
-    
+
     public void assign(String var, TLValue value) {
-        if(resolve(var) != null) {
+        if (resolve(var) != null) {
             // There is already such a variable, re-assign it
             this.reAssign(var, value);
-        }
-        else {
+        } else {
             // A newly declared variable
             variables.put(var, value);
         }
@@ -53,11 +52,10 @@ public class Scope {
     }
 
     private void reAssign(String identifier, TLValue value) {
-        if(variables.containsKey(identifier)) {
+        if (variables.containsKey(identifier)) {
             // The variable is declared in this scope
             variables.put(identifier, value);
-        }
-        else if(parent != null) {
+        } else if (parent != null) {
             // The variable was not declared in this scope, so let
             // the parent scope re-assign it
             parent.reAssign(identifier, value);
@@ -66,26 +64,24 @@ public class Scope {
 
     public TLValue resolve(String var) {
         TLValue value = variables.get(var);
-        if(value != null) {
+        if (value != null) {
             // The variable resides in this scope
             return value;
-        }
-        else if(!isGlobalScope()) {
+        } else if (!isGlobalScope()) {
             // Let the parent scope look for the variable
             return parent.resolve(var);
-        }
-        else {
+        } else {
             // Unknown variable
             return null;
         }
     }
-    
+
     @Override
     public String toString() {
-    	StringBuilder sb = new StringBuilder();
-    	for(Map.Entry<String,TLValue> var: variables.entrySet()) {
-    		sb.append(var.getKey()+"->"+var.getValue()+",");
-    	}
-    	return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, TLValue> var : variables.entrySet()) {
+            sb.append(var.getKey() + "->" + var.getValue() + ",");
+        }
+        return sb.toString();
     }
 }

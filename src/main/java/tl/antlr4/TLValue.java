@@ -15,72 +15,68 @@ public class TLValue implements Comparable<TLValue> {
     }
 
     public TLValue(Object v) {
-        if(v == null) {
+        if (v == null) {
             throw new RuntimeException("v == null");
         }
         value = v;
         // only accept boolean, list, number or string types
-        if(!(isBoolean() || isList() || isNumber() || isString())) {
+        if (!(isBoolean() || isList() || isNumber() || isString())) {
             throw new RuntimeException("invalid data type: " + v + " (" + v.getClass() + ")");
         }
     }
 
     public Boolean asBoolean() {
-        return (Boolean)value;
+        return (Boolean) value;
     }
 
     public Double asDouble() {
-        return ((Number)value).doubleValue();
+        return ((Number) value).doubleValue();
     }
 
     public Long asLong() {
-        return ((Number)value).longValue();
+        return ((Number) value).longValue();
     }
 
     @SuppressWarnings("unchecked")
     public List<TLValue> asList() {
-        return (List<TLValue>)value;
+        return (List<TLValue>) value;
     }
 
     public String asString() {
-        return (String)value;
+        return (String) value;
     }
 
-    //@Override
+    @Override
     public int compareTo(TLValue that) {
-        if(this.isNumber() && that.isNumber()) {
-            if(this.equals(that)) {
+        if (this.isNumber() && that.isNumber()) {
+            if (this.equals(that)) {
                 return 0;
-            }
-            else {
+            } else {
                 return this.asDouble().compareTo(that.asDouble());
             }
-        }
-        else if(this.isString() && that.isString()) {
+        } else if (this.isString() && that.isString()) {
             return this.asString().compareTo(that.asString());
-        }
-        else {
+        } else {
             throw new RuntimeException("illegal expression: can't compare `" + this + "` to `" + that + "`");
         }
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this == VOID || o == VOID) {
+        if (this == VOID || o == VOID) {
             throw new RuntimeException("can't use VOID: " + this + " ==/!= " + o);
         }
-        if(this == o) {
+        if (this == o) {
             return true;
         }
-        if(o == null || this.getClass() != o.getClass()) {
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        TLValue that = (TLValue)o;
-        if(this.isNumber() && that.isNumber()) {
+        TLValue that = (TLValue) o;
+        if (this.isNumber() && that.isNumber()) {
             double diff = Math.abs(this.asDouble() - that.asDouble());
             return diff < 0.00000000001;
-        }
-        else {
+        } else {
             return this.value.equals(that.value);
         }
     }

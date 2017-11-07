@@ -14,15 +14,15 @@ public class Main {
             TLParser parser = new TLParser(new CommonTokenStream(lexer));
             parser.setBuildParseTree(true);
             ParseTree tree = parser.parse();
-            
+
             Scope scope = new Scope();
-            Map<String, Function> functions = new HashMap<String, Function>();
+            Map<String, Function> functions = new HashMap<>();
             SymbolVisitor symbolVisitor = new SymbolVisitor(functions);
             symbolVisitor.visit(tree);
             EvalVisitor visitor = new EvalVisitor(scope, functions);
             visitor.visit(tree);
         } catch (Exception e) {
-            if ( e.getMessage() != null) {
+            if (e.getMessage() != null) {
                 System.err.println(e.getMessage());
             } else {
                 e.printStackTrace();
