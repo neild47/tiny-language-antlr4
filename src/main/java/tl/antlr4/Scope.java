@@ -15,7 +15,7 @@ public class Scope {
 
     public Scope(Scope p) {
         parent = p;
-        variables = new HashMap<String, TLValue>();
+        variables = new HashMap<>();
     }
 
     public void assignParam(String var, TLValue value) {

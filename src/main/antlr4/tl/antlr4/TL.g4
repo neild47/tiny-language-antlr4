@@ -1,5 +1,8 @@
 grammar TL;
-
+@header{
+package tl.antlr4;
+}
+/*===========================parser===========================**/
 parse
  : block EOF
  ;
@@ -17,7 +20,11 @@ statement
  ;
 
 assignment
- : Identifier indexes? '=' expression
+ : Identifier indexes? '=' expression #normalAssignment
+ | Identifier indexes? '-=' expression #subAssignment
+ | Identifier indexes? '+=' expression #addAssignment
+ | Identifier indexes? '*=' expression #mulAssignment
+ | Identifier indexes? '/=' expression #divAssignment
  ;
 
 functionCall
@@ -102,6 +109,8 @@ indexes
  : ('[' expression ']')+
  ;
 
+
+/*===========================lexer===========================**/
 Println  : 'println';
 Print    : 'print';
 Input    : 'input';
@@ -142,6 +151,7 @@ OParen   : '(';
 CParen   : ')';
 SColon   : ';';
 Assign   : '=';
+SubAssign : '-=';
 Comma    : ',';
 QMark    : '?';
 Colon    : ':';

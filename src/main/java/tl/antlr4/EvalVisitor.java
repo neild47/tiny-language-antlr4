@@ -476,7 +476,7 @@ public class EvalVisitor extends TLBaseVisitor<TLValue> {
     // : Identifier indexes? '=' expression
     // ;
     @Override
-    public TLValue visitAssignment(@NotNull TLParser.AssignmentContext ctx) {
+    public TLValue visitNormalAssignment(@NotNull TLParser.NormalAssignmentContext ctx) {
         TLValue newVal = this.visit(ctx.expression());
         if (ctx.indexes() != null) {
             TLValue val = scope.resolve(ctx.Identifier().getText());
@@ -485,6 +485,85 @@ public class EvalVisitor extends TLBaseVisitor<TLValue> {
         } else {
             String id = ctx.Identifier().getText();
             scope.assign(id, newVal);
+        }
+        return TLValue.VOID;
+    }
+
+    //sub assignment
+    @Override
+    public TLValue visitSubAssignment(TLParser.SubAssignmentContext ctx) {
+        TLValue rvalue = this.visit(ctx.expression());
+        if (rvalue == TLValue.VOID || rvalue == TLValue.NULL || !rvalue.isNumber()) {
+            throw new EvalException(ctx);
+        }
+        if (ctx.indexes() != null) {
+            TLValue val = scope.resolve(ctx.Identifier().getText());
+            List<ExpressionContext> exps = ctx.indexes().expression();
+            TLValue lvalue = resolveIndexes(ctx, val, exps);
+            setAtIndex(ctx, exps, val, new TLValue(lvalue.asDouble() - rvalue.asDouble()));
+        } else {
+            String id = ctx.Identifier().getText();
+            TLValue lvalue = scope.resolve(id);
+            scope.assign(id, new TLValue(lvalue.asDouble() - rvalue.asDouble()));
+        }
+        return TLValue.VOID;
+    }
+
+
+    public TLValue visitAddAssignment(TLParser.AddAssignmentContext ctx) {
+        TLValue rvalue = this.visit(ctx.expression());
+        if (rvalue == TLValue.VOID || rvalue == TLValue.NULL || !rvalue.isNumber()) {
+            throw new EvalException(ctx);
+        }
+        if (ctx.indexes() != null) {
+            TLValue val = scope.resolve(ctx.Identifier().getText());
+            List<ExpressionContext> exps = ctx.indexes().expression();
+            TLValue lvalue = resolveIndexes(ctx, val, exps);
+            setAtIndex(ctx, exps, val, new TLValue(lvalue.asDouble() + rvalue.asDouble()));
+        } else {
+            String id = ctx.Identifier().getText();
+            TLValue lvalue = scope.resolve(id);
+            scope.assign(id, new TLValue(lvalue.asDouble() + rvalue.asDouble()));
+        }
+        return TLValue.VOID;
+    }
+
+
+    @Override
+    public TLValue visitMulAssignment(TLParser.MulAssignmentContext ctx) {
+        TLValue rvalue = this.visit(ctx.expression());
+        if (rvalue == TLValue.VOID || rvalue == TLValue.NULL || !rvalue.isNumber()) {
+            throw new EvalException(ctx);
+        }
+        if (ctx.indexes() != null) {
+            TLValue val = scope.resolve(ctx.Identifier().getText());
+            List<ExpressionContext> exps = ctx.indexes().expression();
+            TLValue lvalue = resolveIndexes(ctx, val, exps);
+            setAtIndex(ctx, exps, val, new TLValue(lvalue.asDouble() * rvalue.asDouble()));
+        } else {
+            String id = ctx.Identifier().getText();
+            TLValue lvalue = scope.resolve(id);
+            scope.assign(id, new TLValue(lvalue.asDouble() * rvalue.asDouble()));
+        }
+        return TLValue.VOID;
+    }
+
+
+    @Override
+    public TLValue visitDivAssignment(TLParser.DivAssignmentContext ctx) {
+        TLValue rvalue = this.visit(ctx.expression());
+        if (rvalue == TLValue.VOID || rvalue == TLValue.NULL || !rvalue.isNumber()) {
+            throw new EvalException(ctx);
+        }
+        if (ctx.indexes() != null) {
+            TLValue val = scope.resolve(ctx.Identifier().getText());
+            List<ExpressionContext> exps = ctx.indexes().expression();
+            TLValue lvalue = resolveIndexes(ctx, val, exps);
+            setAtIndex(ctx, exps, val, new TLValue(lvalue.asDouble() / rvalue.asDouble()));
+        } else {
+            String id = ctx.Identifier().getText();
+            TLValue lvalue = scope.resolve(id);
+            scope.assign(id, new TLValue(lvalue.asDouble() / rvalue.asDouble()));
         }
         return TLValue.VOID;
     }

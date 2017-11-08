@@ -154,12 +154,12 @@ assert(sequence == [0,1,1,2,3,5,8,13,21,34,55]);
 n = [[1,0,0],[0,1,0],[0,0,1]];
 p = [-1, 'abc', true];
 
-
-
 assert('abc' in p);
 assert([0,1,0] in n);
 assert(n[0][2] == 0);
 assert(n[1][1] == n[2][2]);
 assert(p[2]);
 assert(p[1][2] == 'c');
+
+println(a);
 println("All Assertions have passed.");

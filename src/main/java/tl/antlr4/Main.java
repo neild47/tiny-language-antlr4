@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 public class Main {
     public static void main(String[] args) {
         try {
-            TLLexer lexer = new TLLexer(new ANTLRFileStream("src/main/tl/test.tl"));
+            TLLexer lexer = new TLLexer(new ANTLRFileStream("src/main/tl/testthrow"));
             TLParser parser = new TLParser(new CommonTokenStream(lexer));
             parser.setBuildParseTree(true);
             ParseTree tree = parser.parse();
